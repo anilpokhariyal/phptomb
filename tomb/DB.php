@@ -45,18 +45,33 @@ class DB{
 
   public function insert($values=array()){
     $table = $this->__table;
-    $query = $this->connect->query("INSERT INTO ".$table." SET ".$values);
+    $value = $this->parseArray($values);
+    $query = $this->connect->query("INSERT INTO ".$table." SET ".$value);
     return $query;
   }
 
   public function update($values=array()){
-    $result = $this->connect->query("UPDATE ".$this->__table." SET ".$values." WHERE ".$where);
+    $value = $this->parseArray($values);
+    $result = $this->connect->query("UPDATE ".$this->__table." SET ".$value." WHERE ".$this->where);
     return $result;
   }
 
   public function where($where=array()){
-    $this->where = $array;
+    $this->where = $this->parseArray($where);
     return $this;
+  }
+
+  public function parseArray($array=array()){
+    $result = '';
+    $count = 0;
+    foreach($array as $k=>$arr){
+      if($count==0)
+        $result .= $k."='".$arr."'";
+      else
+        $result .= ",".$k."='".$arr."'";
+        $count++;
+    }
+    return $result;
   }
 }
 ?>
