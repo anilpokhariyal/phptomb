@@ -1,18 +1,24 @@
 <?php
-error_reporting(E_ALL);
+session_start();
+// error_reporting(E_ALL);
 //credit erevolutions (india)
 // For OPEN SOURCE
 class DB{
   private $__table='';
-  public $connect;
-  public $query = '';
-  public $where = '';
-  public $andDeli = ' AND ';
-  public $commaDeli = ', ';
+  private $connect;
+  private $query = '';
+  private $where = '';
+  private $andDeli = ' AND ';
+  private $commaDeli = ', ';
+  private $selects = ' * ';
   public function __construct($table){
     $this->__table = $table;
     require_once("server.php");
     $this->connect = $this->connection($SERVER,$USER,$PASS,$DBNAME);
+  }
+
+  public function __destruct(){
+    mysqli_close();
   }
 
   public function connection($SERVER = '', $USER = '', $PASS = '', $DBNAME = '') {
@@ -30,13 +36,29 @@ class DB{
      return new DB($table);
   }
 
+  public function generateQuery(){
+    if($this->where == '')
+      $this->where = '1';
+    $query = "SELECT ".$this->selects." FROM ".$this->__table.' WHERE '.$this->where;
+    $this->_log($query);
+    return $query;
+  }
+
   public function get(){
     $output = array();
-    $response = $this->connect->query($this->query);
+    $query = $this->generateQuery();
+    $response = $this->connect->query($query);
     while($result = mysqli_fetch_object($response)){
       $output[] = $result;
     }
     return (object) $output;
+  }
+
+  public function first(){
+    $output = array();
+    $query = $this->generateQuery();
+    $response = $this->connect->query($query.' LIMIT 0,1');
+    return (object) mysqli_fetch_object($response);
   }
 
   public function count(){
@@ -47,8 +69,7 @@ class DB{
   }
 
   public function select($values){
-    $table = $this->__table;
-    $this->query = "SELECT ".$values." from ".$table;
+    $this->selects = $values;
     return $this;
   }
 
@@ -61,24 +82,58 @@ class DB{
 
   public function update($values=array()){
     $value = $this->parseArray($values,$this->commaDeli);
-    $result = $this->connect->query("UPDATE ".$this->__table." SET ".$value." WHERE ".$this->where);
+    $query = "UPDATE ".$this->__table." SET ".$value." WHERE ".$this->where;
+    $this->_log($query);
+    $result = $this->connect->query($query);
     return $result;
   }
 
-  public function where($where=array()){
-    $this->where .= $this->parseArray($where,$this->andDeli);
+  public function where($key='',$sec='',$third=''){
+    if(is_array($key)){
+      $this->where .= $this->parseArray($key,$this->andDeli);
+    }else{
+    $exp = '=';
+    if($third=='')
+      $value = $sec;
+    else {
+      $exp = $sec;
+      $value = $third;
+    }
+    if($this->where!='')
+      $this->where .= ' '.$this->andDeli;
+    $this->where .=$key.$exp.$value.' ';
+    }
+    $this->_log($this->where);
+    return $this;
+  }
+
+  public function raw($qry=''){
+    $this->query .= $qry;
+    return $this;
+  }
+
+  public function limit($from,$count){
+    $this->query .= ' LIMIT '.$from.','.$count;
     return $this;
   }
 
   public function parseArray($array=array(),$delimeter=''){
-    function value_maker(&$item, $key, $prefix){
-        $item = "$prefix$item$prefix";
+    $result = ' ';
+    $sr = 0;
+    $limit = count($array);
+    foreach($array as $k=>$a){
+      $sr++;
+      if($sr==$limit)
+      $result .= $k.'="'.$a.'" ';
+      else
+      $result .= $k.'="'.$a.'" '. $delimeter;
     }
-    array_walk($array, 'value_maker', '\'');
-    $result = '';
-    $count = 0;
-    $result = urldecode(http_build_query($array,'',$delimeter));
+    $this->_log($result);
     return $result;
+  }
+
+  public function _log($result){
+    file_put_contents('logs/.log_'.date("j.n.Y").'.txt', $result."\n", FILE_APPEND);
   }
 }
 ?>
