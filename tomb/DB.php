@@ -1,14 +1,16 @@
 <?php
 session_start();
-// error_reporting(E_ALL);
+error_reporting(E_ALL);
 //credit erevolutions (india)
 // For OPEN SOURCE
 class DB{
   private $__table='';
   private $connect;
   private $query = '';
+  private $joinQry = '';
   private $where = '';
   private $andDeli = ' AND ';
+  private $orDeli = ' OR ';
   private $commaDeli = ', ';
   private $selects = ' * ';
   public function __construct($table){
@@ -39,7 +41,7 @@ class DB{
   public function generateQuery(){
     if($this->where == '')
       $this->where = '1';
-    $query = "SELECT ".$this->selects." FROM ".$this->__table.' WHERE '.$this->where;
+    $query = "SELECT ".$this->selects." FROM ".$this->__table.' '.$this->joinQry.' WHERE '.$this->where;
     $this->_log($query);
     return $query;
   }
@@ -88,9 +90,25 @@ class DB{
     return $result;
   }
 
+  public function leftJoin($table='',$field_table1='',$field_table2=''){
+    $this->joinQry .= ' LEFT JOIN '.$table.' ON '.$field_table1.' = '.$field_table2;
+    $this->_log($this->joinQry);
+    return $this;
+  }
+
   public function where($key='',$sec='',$third=''){
+    $this->generateWhere($key,$sec,$third,$this->andDeli);
+    return $this;
+  }
+
+  public function orWhere($key='',$sec='',$third=''){
+    $this->generateWhere($key,$sec,$third,$this->$orDeli);
+    return $this;
+  }
+
+  public function generateWhere($key='',$sec='',$third='',$deli=''){
     if(is_array($key)){
-      $this->where .= $this->parseArray($key,$this->andDeli);
+      $this->where .= $this->parseArray($key,$deli);
     }else{
     $exp = '=';
     if($third=='')
@@ -100,11 +118,11 @@ class DB{
       $value = $third;
     }
     if($this->where!='')
-      $this->where .= ' '.$this->andDeli;
+      $this->where .= ' '.$deli;
     $this->where .=$key.$exp.$value.' ';
     }
     $this->_log($this->where);
-    return $this;
+    return $this->where;
   }
 
   public function raw($qry=''){
