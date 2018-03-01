@@ -106,6 +106,16 @@ class DB{
     return $this;
   }
 
+  public function whereIn($field, $array){
+      $this->where .= $field.' IN ('.implode(',',$array).')';
+      return $this;
+  }
+
+  public function whereNotIn($field, $array){
+      $this->where .= $field.' NOT IN ('.implode(',',$array).')';
+      return $this;
+  }
+
   public function generateWhere($key='',$sec='',$third='',$deli=''){
     if(is_array($key)){
       $this->where .= $this->parseArray($key,$deli);
