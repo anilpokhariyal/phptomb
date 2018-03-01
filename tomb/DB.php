@@ -161,7 +161,7 @@ class DB{
   }
 
   public function _log($result){
-    file_put_contents('logs/.log_'.date("j.n.Y").'.txt', $result."\n", FILE_APPEND);
+    file_put_contents('logs/.log_'.date("j.n.Y").'.txt', date('Y-m-d H:i:s').":".$result."\n", FILE_APPEND);
   }
 }
 ?>
