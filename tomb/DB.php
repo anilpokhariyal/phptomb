@@ -135,9 +135,9 @@ class DB{
     return $this->where;
   }
 
-  public function raw($qry=''){
-    $this->query .= $qry;
-    return $this;
+  public static function raw($qry=''){
+    $response = $this->connect->query($qry);
+    return (object) $response;
   }
 
   public function limit($from,$count){
