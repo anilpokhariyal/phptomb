@@ -38,6 +38,10 @@ class DB{
      return new DB($table);
   }
 
+  public static function create($table){
+    return new DB($table);
+  }
+
   public function generateQuery(){
     if($this->where == '')
       $this->where = '1';
