@@ -7,6 +7,7 @@ class DB{
   private $__table='';
   private $connect;
   private $query = '';
+  private $addQry = '';
   private $joinQry = '';
   private $where = '';
   private $andDeli = ' AND ';
@@ -40,6 +41,22 @@ class DB{
 
   public static function create($table){
     return new DB($table);
+  }
+
+  public function addColumn($columnName='',$columnType='text',$columnSize=0,$nullable='NOT NULL'){
+    $this->addQry .= ' `'.$columnName.'` '.$columnType;
+    if($columnSize>0){
+     $this->addQry .= '('.$columnSize.') ';
+    }
+    $this->addQry .= ' '.$nullable.', ';
+    return $this;
+  }
+
+  public function execute(){
+    $query = "CREATE TABLE `".$this->__table."` ( `id` INT NOT NULL AUTO_INCREMENT ,".$this->addQry." `created_at` DATETIME NOT NULL , `updated_at` DATETIME NOT NULL , PRIMARY KEY (`id`))";
+    $this->_log($query);
+    $result = $this->connect->query($query);
+    return $query;
   }
 
   public function generateQuery(){
