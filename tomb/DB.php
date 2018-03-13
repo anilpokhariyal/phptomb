@@ -152,7 +152,8 @@ class DB{
     }
     if($this->where!='')
       $this->where .= ' '.$deli;
-    $this->where .=$key.$exp.$value.' ';
+      
+    $this->where .= '`'.$key.'`'.$exp.$value.' ';
     }
     $this->_log($this->where);
     return $this->where;
@@ -169,12 +170,12 @@ class DB{
   }
 
   public function orderBy($column='id',$order='ASC'){
-      $this->orderBy .= ' ORDER BY '.$column.' '.$order;
+      $this->orderBy .= ' ORDER BY `'.$column.'` '.$order;
       return $this;
   }
 
   public function groupBy($column){
-      $this->groupBy .= ' GROUP BY '.$column;
+      $this->groupBy .= ' GROUP BY `'.$column.'` ';
       return $this;
   }
 
@@ -185,16 +186,16 @@ class DB{
     foreach($array as $k=>$a){
       $sr++;
       if($sr==$limit)
-      $result .= $k.'="'.$a.'" ';
+      $result .= '`'.$k.'`="'.$a.'" ';
       else
-      $result .= $k.'="'.$a.'" '. $delimeter;
+      $result .= '`'.$k.'`="'.$a.'" '. $delimeter;
     }
     $this->_log($result);
     return $result;
   }
 
   public function _log($result){
-    file_put_contents('logs/.log_'.date("j.n.Y").'.txt', date('Y-m-d H:i:s').":".$result."\n", FILE_APPEND);
+    file_put_contents('logs/tomb_log_'.date("j.n.Y").'.txt', date('Y-m-d H:i:s').":".$result."\n", FILE_APPEND);
   }
 }
 ?>
