@@ -14,6 +14,8 @@ class DB{
   private $orDeli = ' OR ';
   private $commaDeli = ', ';
   private $selects = ' * ';
+  private $orderBy = ' ';
+  private $groupBy = ' ';
   public function __construct($table){
     $this->__table = $table;
     require_once("server.php");
@@ -56,13 +58,13 @@ class DB{
     $query = "CREATE TABLE `".$this->__table."` ( `id` INT NOT NULL AUTO_INCREMENT ,".$this->addQry." `created_at` DATETIME NOT NULL , `updated_at` DATETIME NOT NULL , PRIMARY KEY (`id`))";
     $this->_log($query);
     $result = $this->connect->query($query);
-    return $query;
+    return $result;
   }
 
   public function generateQuery(){
     if($this->where == '')
       $this->where = '1';
-    $query = "SELECT ".$this->selects." FROM ".$this->__table.' '.$this->joinQry.' WHERE '.$this->where;
+    $query = "SELECT ".$this->selects." FROM ".$this->__table.' '.$this->joinQry.' WHERE '.$this->where.' '.$this->orderBy.' '.$this->groupBy;
     $this->_log($query);
     return $query;
   }
@@ -164,6 +166,16 @@ class DB{
   public function limit($from,$count){
     $this->query .= ' LIMIT '.$from.','.$count;
     return $this;
+  }
+
+  public function orderBy($column='id',$order='ASC'){
+      $this->orderBy .= ' ORDER BY '.$column.' '.$order;
+      return $this;
+  }
+
+  public function groupBy($column){
+      $this->groupBy .= ' GROUP BY '.$column;
+      return $this;
   }
 
   public function parseArray($array=array(),$delimeter=''){
