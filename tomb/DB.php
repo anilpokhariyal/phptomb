@@ -88,7 +88,7 @@ class DB{
 
   public function count(){
     $output = 0;
-    $response = $this->connect->query("SELECT * from ".$this->__table." WHERE ".$this->where);
+    $response = $this->connect->query("SELECT * from ".$this->__table." WHERE ".$this->where.' '.$this->orderBy.' '.$this->groupBy);
     $output = mysqli_num_rows($response);
     return $output;
   }
@@ -152,7 +152,7 @@ class DB{
     }
     if($this->where!='')
       $this->where .= ' '.$deli;
-      
+
     $this->where .= '`'.$key.'`'.$exp.$value.' ';
     }
     $this->_log($this->where);
