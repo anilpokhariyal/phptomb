@@ -55,7 +55,7 @@ class DB{
   }
 
   public function execute(){
-    $query = "CREATE TABLE `".$this->__table."` ( `id` INT NOT NULL AUTO_INCREMENT ,".$this->addQry." `created_at` DATETIME NOT NULL , `updated_at` DATETIME NOT NULL , PRIMARY KEY (`id`))";
+    $query = "CREATE TABLE `".$this->__table."` ( `id` INT NOT NULL AUTO_INCREMENT ,".$this->addQry." `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP , `updated_at` DATETIME ON UPDATE CURRENT_TIMESTAMP, PRIMARY KEY (`id`))";
     $this->_log($query);
     $result = $this->connect->query($query);
     return $result;
@@ -153,7 +153,7 @@ class DB{
     if($this->where!='')
       $this->where .= ' '.$deli;
 
-    $this->where .= '`'.$key.'`'.$exp.$value.' ';
+    $this->where .= '`'.$key.'`'.$exp.'"'.$value.'" ';
     }
     $this->_log($this->where);
     return $this->where;
