@@ -1,7 +1,7 @@
  <div class="jumbotron">
         <div class="container">
           <h1 class="display-3">Easy PHP-MySQL Connection</h1>
-          <p>Working with Core PHP cost you time and efforts to create and execute queries. PHPTomb is easy to start solution for this problem. No more length code and redundant queries.</p>
+          <p>Working with Core PHP cost you time and efforts to create and execute queries. PHPTomb is easy to start solution for this problem. No more length code and redundant queries required with phptomb. with inclusion of a single file you can upgrade your core php project to an ORM solution. This project is an opensource project, hence developers can update it and improve it as per their need. Improvement in the existing functionality is appriciated too.</p>
           <p><a class="btn btn-warning btn-lg" href="#" role="button">Download</a></p>
         </div>
       </div>
