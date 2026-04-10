@@ -1,221 +1,212 @@
- <div class="jumbotron">
-        <div class="container">
-          <h1 class="display-3">Easy PHP-MySQL Connection</h1>
-          <p>Working with Core PHP cost you time and efforts to create and execute queries. PHPTomb is easy to start solution for this problem. No more length code and redundant queries required with phptomb. with inclusion of a single file you can upgrade your core php project to an ORM solution. This project is an opensource project, hence developers can update it and improve it as per their need. Improvement in the existing functionality is appriciated too.</p>
-          <p><a class="btn btn-warning btn-lg" href="#" role="button">Download</a></p>
-        </div>
-      </div>
-      <div class="row">
-      <?php include('sidebar.php'); ?>
-        <div class="col-10">
-          <div id="setup">
-            <h2>Setting Up</h2>
-            <p>To Setup PHPTomb in your core php project just downlaod the PHPTomb and put the tomb folder and server.php file (both present in PHPTomb download) in your project folder.</p>
-            <p>Setup server connection on server.php</p>
-            <p class="bg-warning p-2">
-              $DBNAME = 'database';<br />
-              $SERVER = 'localhost';<br />
-              $USER = 'username';<br />
-              $PASS = 'password';<br />
-            </p>
-            <p>Include below code at Top of your PHP file you want to connect with mysql.</p>
-            <p class="bg-warning p-2">
-              require 'tomb/DB.php';
-            </p>
-            <p>Now you are ready to use PHPTomb.</p>
-          </div>
-          <div id="useme">
-            <h2>Use me</h2>
-            <p>PHPTomb use is similart to laravel ORM, however It include only basic functions that comes handy while working with core php projects.</p>
-            <p>A basic example of fetching all record from "users" table is below</p>
-            <p class="bg-warning p-2">
-              DB::table('users')->get();
-            </p>
-          </div>
-          <div id="documentation">
-            <h2>Documentation</h2>
-            <div id="db">
-              <h3>DB</h3>
-              <p><strong>DB</strong> is a contant that hold the reference of current connection.</p>
-              <p class="bg-warning p-2">
-                DB()
-              </p>
-            </div>
-            <div id="create">
-              <h3>create()</h3>
-              <p><strong>create()</strong> is used when you want to create new table. A table must have column hence it should be followed by addColumn() to add column.
-              create can only be use with addColumn() function to add column to the table.</p>
-              <p><b>id</b> field will be added as default in table which is "primary key" and "auto increments"</p>
-              <p><b>created_at</b> and <b>updated_at</b> will also be added to table of type date by default which will hold the information of record insert datetime and update datetime. </p>
-              <p class="bg-warning p-2">
-                DB::create($table)
-              </p>
-            </div>
-            <div id="addcolumn">
-              <h3>addColumn()</h3>
-              <p><strong>addColumn()</strong> is used to addFields in table. addColumn() expects 4 arguments to passed.</p>
-              <p>Like: addColumn($fieldname,$fieldtype,$fieldsize,$nullable)</p>
-              <p>first argument $fieldname is the name of field. </p>
-              <p>$fieldtype is the type of value that will be accepted in field. Like: text,int,varchar etc.</p>
-              <p>$fieldsize is the max length value that will be accepted. Like: 10,20,200 etc.</p>
-              <p>$nullable expects 'NULL' or 'NOT NULL' as the field value to let nullable or not.</p>
-              <p><strong>NOTE: addColumn() will be work only with execute() to make those changes to table.</strong></p>
-              <p class="bg-warning p-2">
-                DB::create($table)->addColumn('name','varchar',50,'NOT NULL')->addColumn('phone','int',13,'NULL')->execute();
-              </p>
-            </div>
-            <div id="table">
-              <h3>table()</h3>
-              <p><strong>table()</strong> is used to select the table you want to perform functions on. table() is used with other functional operations.</p>
-              <p>Basic Example of table() is below</p>
-              <p class="bg-warning p-2">
-                DB::table('tablename')->get();
-              </p>
-            </div>
-            <div id="get">
-              <h3>get()</h3>
-              <p><strong>get()</strong> fetch all records from the selected table. this is the query builder function hence should be called at the end of functions chain.</p>
-              <p>Basic Example of get() is below</p>
-              <p class="bg-warning p-2">
-                DB::table('users')->get();
-              </p>
-            </div>
-            <div id="first">
-              <h3>first()</h3>
-              <p><strong>first()</strong> fetch first records from the selected table. this is also a query builder function hence should be called at the end of functions chain. you can either perform get() or first().</p>
-              <p>Example of first() is below</p>
-              <p class="bg-warning p-2">
-                DB::table('users')->first();
-              </p>
-            </div>
-            <div id="count">
-              <h3>count()</h3>
-              <p><strong>count()</strong> counts the records count from the selected table. this is a query builder function hence should be called at the end of functions chain. No Other query builder function can be used with this function.</p>
-              <p>Example of count() is below</p>
-              <p class="bg-warning p-2">
-                DB::table('users')->count();
-              </p>
-            </div>
-            <div id="select">
-              <h3>select()</h3>
-              <p><strong>select()</strong> will fetch only passed fields of table in output result. It is recommended that you use it right after table() function but not necessarly.</p>
-              <p>Example of select() is below</p>
-              <p class="bg-warning p-2">
-                DB::table('users')->select('column1,column2,column3')->get();
-              </p>
-            </div>
-            <div id="insert">
-              <h3>insert()</h3>
-              <p><strong>insert()</strong> expects an array parameter with column name as key and value to be inserted.</p>
-              <p>Example of insert($array) is below</p>
-              <p class="bg-warning p-2">
-                DB::table('users')->insert(array('name'=>'Bruno','job'=>'engineer','mobile'=>123456789));
-              </p>
-            </div>
-            <div id="update">
-              <h3>update()</h3>
-              <p><strong>update()</strong> expects an array parameter with column name as key and value to be updated similar to insert but followed by where() function.</p>
-              <p>Example of update($array) is below</p>
-              <p class="bg-warning p-2">
-                DB::table('users')->where('id',1)->update(array('name'=>'Bruno','job'=>'doctor','mobile'=>9876543210));
-              </p>
-            </div>
-            <div id="where">
-              <h3>where()</h3>
-              <p><strong>where()</strong> uses to filter record by some conditions on data. where() can be used by three different ways :</p>
-              <p>Example of where() with 'key', 'value' parameter</p>
-              <p class="bg-warning p-2">
-                DB::table('users')->where('key','value')->get();<br />
-              LIKE :  DB::table('users')->where('id','45')->get();
-              </p>
-              <p>Example of where() with 'key','Expression' and 'value' parameter</p>
-              <p class="bg-warning p-2">
-                DB::table('users')->where('key','Expression','value')->get();<br />
-                LIKE : DB::table('users')->where('id','>','4')->get();
-              </p>
-              <p>Example of where() with multiple conditions</p>
-              <p class="bg-warning p-2">
-                DB::table('users')->where($array)->get();<br />
-                LIKE : DB::table('users')->where(array('name'=>'Bruno','job'=>'doctor'))->get();
-              </p>
-              <p>
-                Possible Expressions : <br />
-                <b>=</b> : Equal to<br />
-                <b><</b> : less than<br />
-                <b><=</b> : less than equal to<br />
-                <b>></b> : greater than<br />
-                <b>>=</b> : greater than equal to<br />
-                <b>LIKE</b> : like value (%value%)<br />
-              </p>
-            </div>
-            <div id="orWhere">
-              <h3>orWhere()</h3>
-              <p><strong>orWhere()</strong> is usesful for making a query with two alternative conditions like this or that. orWhere() can only use after a where().</p>
-              <p>Example of orWhere() is below</p>
-              <p class="bg-warning p-2">
-                DB::table('users')->where('id',1)->orWhere('name','John')->get();
-              </p>
-            </div>
-            <div id="whereIn">
-              <h3>whereIn()</h3>
-              <p><strong>whereIn()</strong> is usesful for making a query where a condition could be be true for any of the given value of a column.</p>
-              <p>Example of whereIn() is below</p>
-              <p class="bg-warning p-2">
-                DB::table('users')->whereIn('id',array(1,2,4,7))->get();
-              </p>
-            </div>
-            <div id="whereNotIn">
-              <h3>whereNotIn()</h3>
-              <p><strong>whereNotIn()</strong> is usesful for making a query where we want all result besides for whom condition is true.</p>
-              <p>Example of whereNotIn() is below</p>
-              <p class="bg-warning p-2">
-                DB::table('users')->whereNotIn('id',array(2,4))->get();<br />
-                // this will result in all row but not where id is 2 and 4.
-              </p>
-            </div>
-            <div id="limit">
-              <h3>limit()</h3>
-              <p><strong>limit()</strong> will retrieve only that number of rows you want from a table. It expects two parameter from and to i.e. from which row to which.</p>
-              <p>Example of limit() is below</p>
-              <p class="bg-warning p-2">
-                DB::table('users')->limit(0,14)->get();<br />
-                //this will return only 15 rows from table users.
-              </p>
-            </div>
-            <div id="raw">
-              <h3>raw()</h3>
-              <p><strong>raw()</strong> is used to pass your custom queries.</p>
-              <p>Example of raw() is below</p>
-              <p class="bg-warning p-2">
-                DB::raw("select *from users where name='tom' and id>9");<br />
-              </p>
-            </div>
-            <div id="leftJoin">
-              <h3>leftJoin()</h3>
-              <p><strong>leftJoin()</strong> is used fetch records from more than one table with a foreign key. It expects three parameters, second table name, first table primary key and second table foreign key.</p>
-              <p>Example of leftJoin($table,$field1,$field2) is below</p>
-              <p class="bg-warning p-2">
-                DB::table('table2')->leftJoin('table2','table1.id','table2.key')->get();<br />
-              </p>
-            </div>
-            <div id="groupby">
-              <h3>groupBy()</h3>
-              <p><strong>groupBy()</strong> is used fetch result grouped by a field.</p>
-              <p>Example of groupBy() is below</p>
-              <p class="bg-warning p-2">
-                DB::table('table2')->groupBy('city')->select('city')->get();<br />
-              </p>
-            </div>
-            <div id="oderby">
-              <h3>orderBy()</h3>
-              <p><strong>orderBy()</strong> is used fetch result with order of certain field.</p>
-              <p>orderBy() expects two arguments, first is field name and second order i.e. ASC for Ascending, DESC for Descending.</p>
-              <p>Example of orderBy() is below</p>
-              <p class="bg-warning p-2">
-                DB::table('table2')->orderBy('name','DESC')->select('*')->get();<br />
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    
+# PHPTomb
+
+PHPTomb is a small **MySQL query builder** for plain (“core”) PHP projects. It gives you a fluent API similar in spirit to Laravel’s query builder (`DB::table('users')->where(...)->get()`) without adopting a full framework.
+
+**Requirements**
+
+- PHP **8.0+**
+- Extension **`mysqli`**
+- **MySQL** (or MariaDB with compatible SQL)
+
+---
+
+## Integrating into a core PHP project
+
+### 1. Add the library to your project
+
+**Option A — Composer (recommended)**
+
+If this package is published on Packagist, from your project root:
+
+```bash
+composer require phptomb/phptomb
+```
+
+Otherwise add a [path](https://getcomposer.org/doc/05-repositories.md#path) or [VCS](https://getcomposer.org/doc/05-repositories.md#loading-a-package-from-a-vcs-repository) repository in your `composer.json`, then run `composer require` as usual.
+
+Composer autoloads the `DB` class from the `tomb/` folder. In your PHP files:
+
+```php
+require_once __DIR__ . '/vendor/autoload.php';
+```
+
+**Option B — Copy files manually**
+
+Copy the `tomb/` directory into your project (for example `lib/tomb/` or `includes/tomb/`). You also need a **`server.php`** next to `tomb/` **or** you configure the database entirely via **environment variables** (see below).
+
+Load the class with a path that matches your layout:
+
+```php
+require_once __DIR__ . '/tomb/DB.php';
+```
+
+PHPTomb resolves `server.php` from **`dirname(tomb/DB.php)/../server.php`** — i.e. one level **above** the `tomb/` folder. If you put `tomb` under `includes/tomb/`, place `server.php` under `includes/server.php`.
+
+### 2. Configure the database connection
+
+PHPTomb reads settings in this order:
+
+1. **Environment variables** (if set): `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASS`, `DB_NAME`
+2. Otherwise **`server.php`** (after it is loaded): `$SERVER`, `$DB_PORT`, `$USER`, `$PASS`, `$DBNAME`
+
+Example `server.php` at the same level as the `tomb/` folder:
+
+```php
+<?php
+$SERVER = 'localhost';
+$DB_PORT = 3306;
+$USER = 'myuser';
+$PASS = 'secret';
+$DBNAME = 'myapp';
+```
+
+For production, prefer **environment variables** (web server, `.env` loader, Docker, systemd) so credentials are not committed. See `env.example` in this repository.
+
+### 3. Bootstrap once per request
+
+In a typical core PHP app you include the bootstrap at the top of each script that uses the database, or once from a shared `init.php` / `config.php`:
+
+```php
+<?php
+declare(strict_types=1);
+
+// Optional: enable SQL logging to project_root/logs/ (off by default)
+// define('TOMB_LOG_ENABLED', true);
+
+require_once __DIR__ . '/vendor/autoload.php';   // Composer
+// require_once __DIR__ . '/tomb/DB.php';        // manual install
+```
+
+The `DB` class lives in the **global namespace** (there is no `namespace` declaration in `tomb/DB.php`).
+
+There is **no** `session_start()` inside PHPTomb; start the session in your own bootstrap if you need it.
+
+### 4. Use the query builder
+
+`get()` returns an **array** of rows (`stdClass` objects). `first()` returns **`stdClass|null`**.
+
+```php
+$users = DB::table('users')->orderBy('id', 'DESC')->get();
+
+$user = DB::table('users')->where('email', 'ada@example.com')->first();
+
+$total = DB::table('users')->where('active', 1)->count();
+```
+
+**Insert** returns success as a boolean; use **`DB::getLastInsertId()`** after an insert when you need the new primary key:
+
+```php
+$ok = DB::table('users')->insert([
+    'name'  => 'Ada',
+    'email' => 'ada@example.com',
+]);
+$id = DB::getLastInsertId();
+```
+
+**Update** requires a **`where(...)`** clause (to avoid accidental full-table updates):
+
+```php
+DB::table('users')->where('id', $id)->update(['name' => 'Augusta']);
+```
+
+**Delete** also requires a non-empty **`where`** (plain `delete()` without conditions returns `false`).
+
+**Raw SQL** runs on the shared connection:
+
+```php
+$result = DB::raw('SELECT COUNT(*) AS c FROM users');
+```
+
+**Transactions** (InnoDB):
+
+```php
+DB::beginTransaction();
+try {
+    DB::table('users')->insert([/* ... */]);
+    DB::commit();
+} catch (Throwable $e) {
+    DB::rollback();
+    throw $e;
+}
+```
+
+**Connection handle** (advanced use):
+
+```php
+$mysqli = DB::connection();
+```
+
+One **shared** `mysqli` instance is used per request. For long-running workers or tests you can close it with `DB::resetConnection()`.
+
+---
+
+## API overview
+
+| Method | Purpose |
+|--------|---------|
+| `DB::table('name')` | Start a query on a table |
+| `DB::create('name')` | Table builder (with `addColumn`, `execute`) |
+| `select('col1, col2')` | Select clause (comma-separated SQL fragment) |
+| `distinct()` | `SELECT DISTINCT` |
+| `where($k, $v)` / `where($k, $op, $v)` / `where([...])` | `AND` conditions |
+| `orWhere(...)` | `OR` condition |
+| `whereIn` / `whereNotIn` | `IN` / `NOT IN` |
+| `whereNull` / `whereNotNull` | `IS NULL` / `IS NOT NULL` |
+| `leftJoin` / `innerJoin` / `rightJoin` | Joins (`$table`, `$leftExpr`, `$rightExpr`) |
+| `groupBy` / `having` / `orderBy` | Grouping, `HAVING`, `ORDER BY` (`orderBy` supports `table.column`) |
+| `limit($offset, $rowCount)` | MySQL `LIMIT offset, rowCount` |
+| `get()` | All matching rows (**array**) |
+| `first()` | First row or **null** |
+| `exists()` | Whether any row matches |
+| `count()` | Row count (`COUNT(*)`, respects `GROUP BY`) |
+| `insert` / `update` | Insert / update rows |
+| `delete()` | Delete with **required** `where` |
+| `truncateTable()` | `TRUNCATE TABLE` (use with care) |
+| `DB::raw($sql)` | Run arbitrary SQL |
+| `DB::getLastInsertId()` | Last insert id on the shared connection |
+| `DB::beginTransaction` / `commit` / `rollback` | Transactions |
+| `DB::resetConnection()` | Close shared connection |
+
+**Schema helper** (optional, for quick prototypes):
+
+```php
+DB::create('products')
+    ->addColumn('name', 'varchar', 255, 'NOT NULL')
+    ->addColumn('price', 'int', 11, 'NOT NULL')
+    ->execute();
+```
+
+Creates `id`, `created_at`, `updated_at` automatically.
+
+---
+
+## Security and data handling
+
+- String and structured values in `where`, `insert`, and `update` are passed through **`mysqli::real_escape_string`** (and related rules for `NULL`, booleans, numbers). Prefer **parameterized queries** for highly sensitive workloads; PHPTomb is aimed at pragmatic core PHP apps with a balance of ergonomics and safety.
+- **Identifiers** (table/column names in the builder) are restricted to `[a-zA-Z0-9_.]` and split for `table.column`; do not pass user-controlled strings as table or column names.
+- **`having()`** and **`DB::raw()`** embed SQL fragments as supplied. Use only **trusted, application-defined** strings there—never concatenate end-user input.
+- **Logging** of full SQL is **disabled by default**. To enable: `define('TOMB_LOG_ENABLED', true);` **before** including `DB.php`. Logs are written under **`logs/`** at the project root (next to `server.php` / `tomb/`).
+
+### Security automation
+
+- **Dependency audit** (known CVEs in Composer packages): `composer security:audit`
+- **SQL-injection regression tests** (MySQL, same Docker stack as E2E): `composer test:security`  
+  Full integration + security suite: `composer test:e2e` or `./docker/e2e.sh`
+
+Tests live under `tests/Security/` and assert that typical builder paths treat payloads as data, while documenting risky APIs (`having`, `raw`).
+
+---
+
+## Development and Docker
+
+- **Unit tests** (no database): `composer test`
+- **End-to-end + security tests** (PHP + MySQL in Docker): `./docker/e2e.sh` or `composer test:e2e`  
+  Includes chained `where` / `orWhere`, `groupBy` + `having`, multi-column `orderBy`, and `limit` combinations (`tests/E2E/ComplexQueryTest.php`).
+
+See `docker-compose.yml`, `Dockerfile`, and `docker/mysql/init/` for a ready-made stack and schema used by E2E tests.
+
+---
+
+## License
+
+MIT (see `composer.json`).

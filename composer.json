@@ -1,0 +1,28 @@
+{
+  "name": "phptomb/phptomb",
+  "description": "Lightweight PHP MySQL query builder for core PHP projects",
+  "license": "MIT",
+  "require": {
+    "php": ">=8.0",
+    "ext-mysqli": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^10.0"
+  },
+  "autoload": {
+    "classmap": [
+      "tomb/"
+    ]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Phptomb\\Tests\\": "tests/"
+    }
+  },
+  "scripts": {
+    "test": "phpunit -c phpunit.xml.dist",
+    "test:e2e": "phpunit -c phpunit.e2e.xml",
+    "test:security": "phpunit -c phpunit.e2e.xml tests/Security",
+    "security:audit": "composer audit"
+  }
+}
